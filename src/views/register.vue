@@ -8,14 +8,12 @@
         <el-form-item label="密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="验证码">
-          <el-input class="yzm" type="password" autocomplete="off"></el-input>
-          <!-- 这里是验证码图片 -->
-          <img id="yzm"  src="/users/yzm" alt="">
+        <el-form-item label="确认密码" prop="pass2">
+          <el-input type="password" v-model="ruleForm.pass2" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          <router-link class="register" to="/register">注册账号</router-link>
+          <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
+          <router-link class="register" to="/login">登录账号</router-link>
         </el-form-item>
       </el-form>
   </div>
@@ -42,10 +40,21 @@ export default {
           callback();
         }
       }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.ruleForm.user !== '') {
+            // this.$refs.ruleForm.validateField('pass');
+          }
+          callback();
+        }
+      }
       
       return {
         ruleForm: {
               pass: '',
+              pass2: '',
               user: '',
             },
             rules: {
@@ -55,6 +64,9 @@ export default {
               pass: [
                 { validator: validatePass, trigger: 'blur' }
               ],
+              pass2: [
+                { validator: validatePass2, trigger: 'blur' }
+              ],
             }
       }
     },
@@ -62,23 +74,22 @@ export default {
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.$axios.post('/api/users/login',{
-                userName: this.ruleForm.user,
-                passWord: this.ruleForm.pass
+              this.$axios.post('/api/users/register', {
+                  userName: this.ruleForm.user,
+                  passWord: this.ruleForm.pass
               }).then((res)=> {
-                //res就是那个响应的json数据
-                  if(res.data.code == 0) {
-                      //登录成功
-                      this.$message({
-                        message: '恭喜你，登录成功',
+                if(res.data.code == 0) {
+                  this.$message({
+                        message: '恭喜你，注册成功',
                         type: 'success'
-                      });
-                      this.$router.push('/admin');
-                  }else {
-                    this.$message.error('登录失败');
-                  }
+                  });
+                }else {
+                  this.$message.error('注册失败');
+                }
+
               })
             } else {
+              console.log('提交失败!!');
               return false;
             }
           });
@@ -94,18 +105,15 @@ export default {
     border: 1px solid lightblue;
     padding: 30px;
     border-radius: 15px;
-    
   }
   .register  {
     align-items: bottom;
     float: right;
-  }
-  .yzm {
-      width: 100px;
   }
   .title {
       font-size: 20px;
       text-align: center;
       margin-bottom: 20px;
   }
+
 </style>
