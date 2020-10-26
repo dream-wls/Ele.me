@@ -33,6 +33,11 @@ const routes = [
           {
             path : 'addressedit' ,
             component : () => import('@/components/Addressedit.vue')
+          },
+          {
+            path : 'addressupdate/:index' ,
+            component : () => import('@/components/Addressupdate.vue'),
+            props:true,
           }
         ]
       },

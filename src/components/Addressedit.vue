@@ -1,6 +1,6 @@
 <template>
   <div id="edit">
-     <van-nav-bar title="我的地址" />
+     <van-nav-bar title="添加地址" left-text="返回" left-arrow @click-left="onRetrun" />
     <van-address-edit
     ref="areaInfo"
     :area-list="areaList"
@@ -33,7 +33,6 @@ export default {
   methods: {
     onSave() {
       Toast('save');
-      // console.log(this.$refs.areaInfo.data);
       this.address = this.$refs.areaInfo.data
       console.log(this.address);
       this.$router.push('/mine/address');
@@ -41,6 +40,7 @@ export default {
 
     },
     onDelete() {
+      this.$refs.areaInfo = '';
       Toast('delete');
     },
     onChangeDetail(val) {
@@ -54,6 +54,9 @@ export default {
       } else {
         this.searchResult = [];
       }
+    },
+    onRetrun(){
+        this.$router.back();
     },
   },
 }

@@ -1,21 +1,22 @@
 <template>
     <div id="address">
-        <van-nav-bar title="我的地址" left-text="返回" left-arrow @click-left="onRetrun"/>
+        <!-- <div v-if="isOk"> -->
+            
+            <van-nav-bar title="我的地址" left-text="返回" left-arrow @click-left="onRetrun"/>
 
-        <!-- 新增的地址 -->
-        <van-address-list
-        v-model="chosenAddressId"
-        :list="list"
-        default-tag-text="默认"
-        @add="onAdd"
-        @edit="onEdit"
-        />
+            <!-- 新增的地址 -->
+            <van-address-list
+            
+            v-model="chosenAddressId"
+            :list="list"
+            default-tag-text="默认"
+            @add="onAdd"
+            @edit="onEdit"
+            />
 
+            <router-view></router-view>
 
-        <h1>{{address}}</h1>
-        <router-view></router-view>
-
-
+        <!-- </div> -->
     </div>
 
 </template>
@@ -29,15 +30,17 @@ export default {
     data(){
         return{
             chosenAddressId: '1',
+            listCon:{ },
             list: [
                 {
                     id: '1',
                     name: '',
                     tel: '',
-                    address: ' ',
-                    isDefault: true,
+                    address: '',
+                    isDefault: '',
                 },
             ],
+            isOk : false ,
         }
     },
     computed:{
@@ -47,9 +50,7 @@ export default {
     },
     methods:{
         onRetrun(){
-            this.$router.back();
-            // this.$router.push('/mine');
-
+            this.$router.push('/mine');
         },
          onAdd() {
             // Toast('新增地址');
@@ -61,23 +62,26 @@ export default {
         },
         onEdit(item, index) {
             Toast('编辑地址:' + index);
+            this.$router.push('/mine/address/addressupdate/'+ index);
         },
         
     },
     created(){
+        // this.isOk = true;
         console.log(this.address);
-        this.list.map((item) => {
-          item.tel = this.address.tel;
-          item.name = this.address.name;
-          item.isDefault = this.address.isDefault;
-          item.address = this.address.province+this.address.city+this.address.county+this.address.country+this.address.addressDetail
-          console.log(item.tel,this.address);
-      })
-      
+        let newAdr = {
+           tel : this.address.tel,
+           name : this.address.name,
+           isDefault : this.address.isDefault,
+           address : this.address.province+this.address.city+this.address.county+this.address.country+this.address.addressDetail,
+        }
+        this.list[0] = newAdr;
+        // this.list.push(newAdr);
+        console.log(this.list);
+        
+    }
 
-    },
-
-    
+     
 }
 </script>
 

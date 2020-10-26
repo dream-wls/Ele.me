@@ -12,7 +12,7 @@
            <div class="icon-right"><van-icon @click="goPerson" name="arrow" /></div>
       </header>
 
-        <ul>
+        <ul class="con">
             <li><van-cell icon="map-marked" title="我的地址" is-link to="/mine/address" /></li>
             <li><van-cell icon="todo-list" title="规则中心" is-link to="/mine/rule" /></li>
              <li><van-cell icon="service-o" title="我的客服"  /></li>
@@ -92,7 +92,7 @@ export default {
             margin-top: 20px;
         }
     }
-    ul{
+    .con{
         padding-top: 140px;
         li{
             border-radius: 4px;
