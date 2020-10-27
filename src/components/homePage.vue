@@ -44,8 +44,8 @@
                   <i class="el-icon-eleme"></i>
                   <span>商品管理</span>
                 </template>
-                <el-menu-item index="/admin/generalAdmin/addProduct" router="true">商品列表</el-menu-item>
-                <el-menu-item index="/admin/generalAdmin/productList" router="true">添加商品</el-menu-item>
+                <el-menu-item index="/admin/generalAdmin/productList" router="true">商品列表</el-menu-item>
+                <el-menu-item index="/admin/generalAdmin/addProduct" router="true">添加商品</el-menu-item>
               </el-submenu>
             </el-menu>
 

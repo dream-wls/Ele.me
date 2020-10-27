@@ -6,7 +6,7 @@
         <el-breadcrumb-item :to="{ path: '/admin/superAdmini' }"
           >首页</el-breadcrumb-item
         >
-        <el-breadcrumb-item>注册商铺</el-breadcrumb-item>
+        <el-breadcrumb-item>添加商品</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -15,7 +15,7 @@
     <!-- 表单部分 -->
     <el-form ref="form" :model="form" label-width="100px">
       <el-form-item class="storeName" label="商品标题" required>
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.menuName"></el-input>
       </el-form-item>
 
       <el-form-item label="商品图片" required>
@@ -30,9 +30,28 @@
         </el-upload>
          </el-form-item>
 
- 
+      <el-form-item  label="是否为招牌">
+          <el-switch
+            v-model="form.menuFlag"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+            <!-- 左右颜色 -->
+          </el-switch>
+      </el-form-item>
+      <el-form-item class="storeName" label="价格" required>
+        <el-input v-model="form.menuPrice"></el-input>
+      </el-form-item>
+
+      <el-form-item class="storeName" label="折扣" required>
+        <el-input v-model="form.menuDiscount"></el-input>
+      </el-form-item>
+
+      <el-form-item class="storeName" label="优惠" required>
+        <el-input v-model="form.menuDiscounts"></el-input>
+      </el-form-item>
+
       <el-form-item label="主要原料">
-        <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-input type="textarea" v-model="form.menuInfo"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">添加</el-button>
@@ -43,51 +62,56 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   data() {
     return {
       form: {
-        name: "",
-        address: "",
-        type: [],
-        minFee: 0,
-        shippingFee: 0,
-        call: "",
-        desc: "",
+        filename:'',
+        menuName: '',
+        menuInfo: '',
+        menuFlag: false,
+        menuDiscount: 1,
+        menuDiscounts: '',
+        menuPrice: 20,
       },
+      storeName:'this',
       imageUrl: '',
       flie: {},
     }
+  },
+  computed: {
+    ...mapState({
+      sName: (state) => state.currentStore,
+    })
   },
   methods: {
     onSubmit() {
       console.log("submit!");
       console.log(this.form);
+      console.log(this.sName);
       var param = new FormData();
       param.append('filename',this.flie);
-      param.append('storeName',this.form.name);
-      // param.append('storeSales',0);
-      param.append('storeType',this.form.type);
-      param.append('storeInfo',this.form.desc);
-      // param.append('storeScore',5);
-      param.append('storeAddress',this.form.address);
-      param.append('storePsf',this.form.minFee);
-      param.append('storePhone',this.form.call);
-      param.append('storeSendFree',this.form.shippingFee);
-      
-      this.$axios.post('/api/store/add',param, {
+      param.append('menuName',this.form.menuName);
+      param.append('menuInfo',this.form.menuInfo);
+      param.append('menuFlag',this.form.menuFlag);
+      param.append('menuDiscount',this.form.menuDiscount);
+      param.append('menuDiscounts',this.form.menuDiscounts);
+      param.append('menuPrice',this.form.menuPrice);
+      param.append('storeName',this.sName);//这里要传入商铺名
+      this.$axios.post('/api/store/caiAdd',param, {
         headers: {'content-Type' : 'multipart/form-data'}
       }).then((res)=> {
         if(res.data.code == 0) {
           this.$message({
-            message: '恭喜你！创建店铺成功',
+            message: '恭喜你！添加商品成功',
             type: 'sucess'
           });
         }else {
-          this.$message.error('创建店铺失败，请重新创建哦');
+          this.$message.error('添加商品失败，请重新添加哦');
         }
       }).catch(()=> {
-          this.$message.error('创建店铺失败，请重新创建哦');
+          this.$message.error('添加商品失败，请重新添加哦');
       })
     },
     //这个是实现预览的操作
@@ -97,6 +121,16 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
       },
   },
+  // created() {
+  //   console.log('jdskljfsaljflsad',this.sName);
+  //   this.storeName= this.sName;
+    
+  // },
+  // mounted() {
+  //   console.log('jdskljfsaljflsad',this.sName);
+  //   this.storeName= this.sName;
+    
+  // }
 };
 </script>
 
