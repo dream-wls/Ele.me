@@ -1,6 +1,6 @@
 <template>
-  <div class="addaccount">
-      addaccount
+  <div>
+      商品列表
   </div>
 </template>
 

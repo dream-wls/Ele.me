@@ -1,5 +1,5 @@
 <template>
-  <div class="addList">
+  <div class="addStore">
     <div>
       <!-- 面包屑 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -10,13 +10,15 @@
       </el-breadcrumb>
     </div>
 
+
+
     <!-- 表单部分 -->
     <el-form ref="form" :model="form" label-width="100px">
-      <el-form-item class="storeName" label="店铺名称" required>
+      <el-form-item class="storeName" label="商品标题" required>
         <el-input v-model="form.name"></el-input>
       </el-form-item>
 
-      <el-form-item label="店铺logo" required>
+      <el-form-item label="商品图片" required>
         <el-upload
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -28,43 +30,12 @@
         </el-upload>
          </el-form-item>
 
-         <el-form-item label="店铺地点">
-            <el-input v-model="form.address" required></el-input>
-        </el-form-item>
-  
-      <el-form-item label="店铺品类" required>
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="饭 店" name="type"></el-checkbox>
-          <el-checkbox label=" 快餐店" name="type"></el-checkbox>
-          <el-checkbox label=" 茶餐厅" name="type"></el-checkbox>
-          <el-checkbox label="火锅店" name="type"></el-checkbox>
-          <el-checkbox label="茶 馆" name="type"></el-checkbox>
-          <el-checkbox label=" 咖啡店" name="type"></el-checkbox>
-          <el-checkbox label="饺子馆" name="type"></el-checkbox>
-          <el-checkbox label="西餐厅" name="type"></el-checkbox>
-          <el-checkbox label="米粉店" name="type"></el-checkbox>
-          <el-checkbox label=" 熟食店" name="type"></el-checkbox>
-          <el-checkbox label="汤品店" name="type"></el-checkbox>
-          <el-checkbox label="面 馆" name="type"></el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-
-      
-        <el-form-item label="起送费用">
-            <el-input v-model="form.minFee" width="100px"></el-input>
-        </el-form-item>
-        <el-form-item label="配送费">
-            <el-input v-model="form.shippingFee" width="100px"></el-input>
-        </el-form-item>
-
-      <el-form-item label="商家电话">
-        <el-input v-model="form.call"></el-input>
-      </el-form-item>
-      <el-form-item label="店铺介绍">
+ 
+      <el-form-item label="主要原料">
         <el-input type="textarea" v-model="form.desc"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
+        <el-button type="primary" @click="onSubmit">添加</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -129,9 +100,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.addList {
-  .el-form {
+<style scoped>
+.el-form {
   margin: 30px 0px;
   width: 400px;
 }
@@ -162,6 +132,4 @@ export default {
   .el-checkbox-group {
       float: left;
   }
-}
-
 </style>

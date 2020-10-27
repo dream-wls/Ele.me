@@ -1,11 +1,16 @@
 <template>
   <div id="app">
-   
     <router-view/>
   </div>
 </template>
 
-<style>
+<script>
+
+export default {
+ 
+}
+</script>
+<style >
 * {
   padding: 0px;
   margin: 0px;

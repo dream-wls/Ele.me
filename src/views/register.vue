@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="registerBox">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <h3 class="title"><i class="el-icon-eleme"></i>后台管理系统</h3>
         <el-form-item label="账号" prop="user">
@@ -72,11 +72,12 @@ export default {
     },
     methods: {
         submitForm(formName) {
+          console.log('点击了注册');
           this.$refs[formName].validate((valid) => {
             if (valid) {
-              this.$axios.post('/api/users/register', {
-                  userName: this.ruleForm.user,
-                  passWord: this.ruleForm.pass
+              this.$axios.post('/api/users/man/register', {
+                  username: this.ruleForm.user,
+                  password: this.ruleForm.pass
               }).then((res)=> {
                 if(res.data.code == 0) {
                   this.$message({
@@ -98,14 +99,7 @@ export default {
 }
 </script>
 
-<style>
-  .demo-ruleForm {
-    width: 400px;
-    margin: 0 auto;
-    border: 1px solid lightblue;
-    padding: 30px;
-    border-radius: 15px;
-  }
+<style scoped>
   .register  {
     align-items: bottom;
     float: right;
@@ -115,5 +109,15 @@ export default {
       text-align: center;
       margin-bottom: 20px;
   }
-
+</style>
+<style lang="scss">
+.registerBox {
+   .demo-ruleForm {
+    width: 400px;
+    margin: 0 auto;
+    border: 1px solid lightblue;
+    padding: 30px;
+    border-radius: 15px;
+  }
+}
 </style>

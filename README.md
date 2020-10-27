@@ -1,19 +1,23 @@
 # ecms
 
-## Project setup
-```
-npm install
-```
+##  第二次提交
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+- 实现了登录注册功能
 
-### Compiles and minifies for production
-```
-npm run build
-```
+- 店铺列表和添加店铺的布局的完成
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+  
+
+## 第三次提交 
+
+- 完成更新的分支路由，（用id进行标识）实现修改重现数据
+
+- 完成商店数据预览的效果
+
+- 完成商店列表数据删除的效果
+
+- 列表数据进行分页
+
+- 
+
+  *2020/10/25*

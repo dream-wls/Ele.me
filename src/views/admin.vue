@@ -8,23 +8,96 @@
               后台管理系统
           </div>
           <div class="right">
-              欢迎您！<span></span>
-              <router-link to="/login">退出</router-link>
+              <div class="select">
+                  <el-select class="elSelect" v-model="value" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </div>
+              欢迎您！<span>{{username}}</span>
+              <router-link to="/login" @click="exit">退出</router-link>
           </div>
           
       </el-header>
       <!-- 内容 -->
         <router-view/>
-
     </el-container>
   </div>
 </template>
 
 <script>
-export default {};
+import {mapState} from 'vuex'
+export default {
+    data() {
+      return {
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '黄金糕'
+      }
+    },
+  mounted() {
+},
+  computed: {
+       ...mapState({
+         username: (state) => state.userName,
+       })
+  },
+  methods: {
+    exit() {
+      localStorage.removeItem('token');
+    }
+  },
+  mounted() {
+    //账号对应的店铺
+    this.$('/api/store/getEmpower?storeName='+ this.username)
+    .then(()=>{
+
+    })
+  }
+
+  
+
+};
 </script>
 
 <style scoped>
+.title {
+    float: left;
+    font-size: 30px;
+    font-weight: 700;
+}
+.right {
+    float: right;
+    font-size: 16px;
+}
+a {
+  color: #333;
+  margin-left: 15px;
+}
+.select {
+  display: inline-block;
+}
+</style>
+<style lang="scss">
+.admin {
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
@@ -74,12 +147,18 @@ body > .el-container {
     padding: 15px 35px;
     box-sizing: content-box;
 }
-.title {
-    float: left;
-    font-size: 30px;
-    font-weight: 700;
+.el-input--suffix {
+  width: 120px;
 }
-.right {
-    float: right;
+
+.elSelect {
+    background-color: #B3C0D1;
+    border-color: #B3C0D1;
+
 }
+.el-select__caret {
+  color: red;
+}
+}
+
 </style>
