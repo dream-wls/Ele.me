@@ -34,18 +34,18 @@
   
       <el-form-item label="店铺品类" required>
         <el-checkbox-group v-model="form.type">
-          <el-checkbox label="饭 店" name="type"></el-checkbox>
-          <el-checkbox label=" 快餐店" name="type"></el-checkbox>
-          <el-checkbox label=" 茶餐厅" name="type"></el-checkbox>
-          <el-checkbox label="火锅店" name="type"></el-checkbox>
-          <el-checkbox label="茶 馆" name="type"></el-checkbox>
-          <el-checkbox label=" 咖啡店" name="type"></el-checkbox>
-          <el-checkbox label="饺子馆" name="type"></el-checkbox>
-          <el-checkbox label="西餐厅" name="type"></el-checkbox>
-          <el-checkbox label="米粉店" name="type"></el-checkbox>
-          <el-checkbox label=" 熟食店" name="type"></el-checkbox>
-          <el-checkbox label="汤品店" name="type"></el-checkbox>
-          <el-checkbox label="面 馆" name="type"></el-checkbox>
+          <el-checkbox label="饭 店" name="type" value="饭 店"></el-checkbox>
+          <el-checkbox label=" 快餐店" name="type" value="快餐店"></el-checkbox>
+          <el-checkbox label=" 茶餐厅" name="type" value="茶餐厅"></el-checkbox>
+          <el-checkbox label="火锅店" name="type" value="火锅店"></el-checkbox>
+          <el-checkbox label="茶 馆" name="type" value="茶 馆"></el-checkbox>
+          <el-checkbox label="咖啡店" name="type" value="咖啡店"></el-checkbox>
+          <el-checkbox label="饺子馆" name="type" value="饺子馆"></el-checkbox>
+          <el-checkbox label="西餐厅" name="type" value="西餐厅"></el-checkbox>
+          <el-checkbox label="米粉店" name="type" value="米粉店"></el-checkbox>
+          <el-checkbox label=" 熟食店" name="type" value="熟食店"></el-checkbox>
+          <el-checkbox label="汤品店" name="type" value="汤品店"></el-checkbox>
+          <el-checkbox label="面 馆" name="type" value="面 馆"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
 

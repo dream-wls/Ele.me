@@ -37,6 +37,12 @@ const routes = [
         name: 'generalAdmin',
         component: () => import('../components/homePage'),
           children: [
+            { 
+              path: '',
+              name: '',
+              component: {template: '<div style="font-size:20px">欢迎使用店铺后台管理系统~~</div>'},
+              
+            },
               //添加商品列表
               {
                 path: 'addProduct',
@@ -59,7 +65,7 @@ const routes = [
             { 
               path: '',
               name: '',
-              component: {template: '<div style="font-size:20px">欢迎使用饿了么后台管理系统</div>'},
+              component: {template: '<div style="font-size:20px">欢迎使用超级管理员后台管理系统~~</div>'},
               
             },
             //店铺列表

@@ -10,15 +10,13 @@
     </div>
 
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="number" label="编号" width="100">
-      </el-table-column>
-      <el-table-column prop="name" label="店铺名称" width="200">
-      </el-table-column>
+      <el-table-column prop="number" label="编号" width="50"> </el-table-column>
+      <el-table-column prop="name" label="店铺名称"> </el-table-column>
       <el-table-column prop="account" label="管理账号"> </el-table-column>
-      <el-table-column prop="evaluate" label="评价" width="80">
+      <el-table-column prop="evaluate" label="评价" width="50">
       </el-table-column>
       <el-table-column prop="address" label="地址"> </el-table-column>
-      <el-table-column label="编辑" width="400px">
+      <el-table-column label="编辑" width="350px">
         <template slot-scope="scope">
           <el-button
             type="success"
@@ -39,20 +37,6 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose"
-    >
-      <span>你确定要删除这个店铺吗？</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false,isDelete = false">取 消</el-button>
-        <el-button type="primary" @click="ensure"
-          >确 定</el-button
-        >
-      </span>
-    </el-dialog>
     <el-pagination
       background
       layout="prev, pager, next"
@@ -71,7 +55,6 @@ export default {
       currentPage: 1,
       pages: 1,
       dialogVisible: false,
-      isDelete: false
     };
   },
   methods: {
@@ -83,31 +66,35 @@ export default {
     },
     del(scope) {
       var id = scope.row.id;
-      var index = scope.$index+1;
-      console.log(index);
-      console.log(id);
-      console.log("删除");
-      //弹出确认对话框
-      this.dialogVisible = true;
-      //进行删除的数据接口请求
-      //当点击确认删除的时候才进行删除
-      console.log(this.isDelete);
-      if(this.isDelete) {
-        console.log('--------');
-        this.$axios.post("/api/store/delete?id=" + id).then((res) => {
+      var index = scope.$index;
+      this.$confirm("此操作将永久删除该店铺, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+        await  this.$axios
+        .post("/api/store/delete?id=" + id)
+        .then((res) => {
           if (res.data.code == 0) {
-              this.$message({
-              message: '删除店铺成功~~~',
-              type: 'success'
+            this.$message({
+              message: "删除店铺成功~~~",
+              type: "success",
             });
           }
-        }).catch((err)=> {
-            this.$message.error('删除失败了');
+             //前台的数据删除
+          this.tableData.splice(index, 1);
         })
-        //前台的数据删除
-        this.tableData.splice(index, 1);
-        this.isDelete = false;
-      }
+        .catch((err) => {
+          this.$message.error("删除失败了");
+        });
+        })
+        .catch((err) => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     nextPage(page) {
       this.$axios.get("/api/store/list?page=" + page).then((res) => {
@@ -127,16 +114,16 @@ export default {
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then((_) => {
-          console.log('1213212313213131');
+          console.log("1213212313213131");
           done();
         })
         .catch((_) => {});
     },
     ensure() {
-        console.log('点击了确认按钮');
-        this.dialogVisible = false;
-        this.isDelete= true;
-    }
+      console.log("点击了确认按钮");
+      this.dialogVisible = false;
+      this.isDelete = true;
+    },
   },
   //进行列表数据的请求
   mounted() {
@@ -145,7 +132,6 @@ export default {
       .get("/api/store/list?page=" + this.currentPage, { id: this.currentPage })
       .then((res) => {
         //拿到数据
-        console.log(res);
         var infos = res.data.infos;
         var datas = infos.map((item, index) => ({
           id: item._id,
@@ -157,7 +143,6 @@ export default {
         }));
         this.tableData = datas;
         this.pages = res.data.total;
-        console.log(this.pages);
       })
       .catch(() => {});
   },
@@ -165,7 +150,6 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
 <style lang='scss'>
 .storeList {
@@ -184,7 +168,6 @@ export default {
   .el-dialog__body {
     height: 150px;
     line-height: 150px;
-
   }
   .el-dialog__footer {
     height: 80px;

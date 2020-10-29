@@ -1,5 +1,5 @@
 <template>
-  <div class="addStore">
+  <div class="addProduct">
     <div>
       <!-- 面包屑 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -38,6 +38,11 @@
             <!-- 左右颜色 -->
           </el-switch>
       </el-form-item>
+      <el-form-item class="storeName" label="商品类型" required>
+          <el-input  class="input" v-model="form.menuType"></el-input>
+      </el-form-item>
+
+
       <el-form-item class="storeName" label="价格" required>
         <el-input v-model="form.menuPrice"></el-input>
       </el-form-item>
@@ -51,7 +56,7 @@
       </el-form-item>
 
       <el-form-item label="主要原料">
-        <el-input type="textarea" v-model="form.menuInfo"></el-input>
+        <el-input type="textarea"  rows="5" cols="20" v-model="form.menuInfo"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">添加</el-button>
@@ -63,7 +68,12 @@
 
 <script>
 import {mapState} from 'vuex'
+import { Button } from 'ant-design-vue'
+console.log(Button);
 export default {
+  components:{
+    [Button.name] : Button,
+  },
   data() {
     return {
       form: {
@@ -74,10 +84,13 @@ export default {
         menuDiscount: 1,
         menuDiscounts: '',
         menuPrice: 20,
+        menuType:''
       },
       storeName:'this',
       imageUrl: '',
       flie: {},
+      radio: '1',
+      addType: ''
     }
   },
   computed: {
@@ -87,9 +100,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("submit!");
-      console.log(this.form);
-      console.log(this.sName);
       var param = new FormData();
       param.append('filename',this.flie);
       param.append('menuName',this.form.menuName);
@@ -98,6 +108,7 @@ export default {
       param.append('menuDiscount',this.form.menuDiscount);
       param.append('menuDiscounts',this.form.menuDiscounts);
       param.append('menuPrice',this.form.menuPrice);
+      param.append('menuType',this.form.menuType);
       param.append('storeName',this.sName);//这里要传入商铺名
       this.$axios.post('/api/store/caiAdd',param, {
         headers: {'content-Type' : 'multipart/form-data'}
@@ -116,26 +127,41 @@ export default {
     },
     //这个是实现预览的操作
     handleAvatarSuccess(res, file) {
-      console.log(file);
       this.flie = file.raw;
       this.imageUrl = URL.createObjectURL(file.raw);
-      },
+    },
+    //添加菜品类型
+    addAction() {
+      console.log('点击了添加按钮');
+      if(!this.addType) {
+        this.$message.error('没有输入任何类型哦');
+        return;
+      }else {
+        // 进行dom操作
+        $('#radioGroup').append(`<el-radio :label="6">十二区</el-radio>`);
+      }
+
+    }
   },
-  // created() {
-  //   console.log('jdskljfsaljflsad',this.sName);
-  //   this.storeName= this.sName;
-    
-  // },
-  // mounted() {
-  //   console.log('jdskljfsaljflsad',this.sName);
-  //   this.storeName= this.sName;
-    
-  // }
+ 
 };
 </script>
+<style>
+.input {
+  float: left;
+  width: 150px;
 
-<style scoped>
-.el-form {
+}
+.addButton {
+  float: left;
+  align-items: center;
+  margin-left: 20px;
+  margin-top: 4px;
+}
+</style>
+<style lang='scss'>
+.addProduct {
+  .el-form {
   margin: 30px 0px;
   width: 400px;
 }
@@ -166,4 +192,10 @@ export default {
   .el-checkbox-group {
       float: left;
   }
+  .el-radio {
+    margin-top: 5px;
+    margin-bottom: 12px;
+  }
+}
+
 </style>

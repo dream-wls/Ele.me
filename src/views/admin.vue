@@ -8,15 +8,22 @@
               后台管理系统
           </div>
           <div class="right">
-              <div class="select">
-                  <el-select class="elSelect" v-model="value" placeholder="请选择">
+              <div class="select" v-if="!isAdmin">
+                  当前店铺：
+                  <el-select class="elSelect"  @change="selectStore" v-model="value" placeholder="请选择">
+
                   <el-option
+                    
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
-                    :value="item.value">
+                    :value="item.value"
+                   
+                    >
                   </el-option>
-                </el-select>
+                  </el-select>
+
+                  <span></span>
               </div>
               欢迎您！<span>{{username}}</span>
               <router-link to="/login" @click="exit">退出</router-link>
@@ -34,44 +41,54 @@ import {mapState} from 'vuex'
 export default {
     data() {
       return {
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '黄金糕'
+        options: [],
+        value: '',
+        storesName: '',
       }
     },
-  mounted() {
-},
+
   computed: {
        ...mapState({
          username: (state) => state.userName,
-       })
+         isAdmin: (state) => state.isAdmin,
+       }),
+       
+  },
+  watch: {
+      username: {
+        handler: function(newVal,oldVal) {
+            this.value = this.username;
+        },
+        immediate: true,
+      }
   },
   methods: {
     exit() {
       localStorage.removeItem('token');
+    },
+    selectStore(){
+      this.storesName = this.options[this.value].label;
+      this.$store.commit('setCurrentStore',this.storesName);
     }
   },
+  
   mounted() {
     //账号对应的店铺
-    this.$('/api/store/getEmpower?storeName='+ this.username)
-    .then(()=>{
-
+    this.$axios.get('/api/store/getPower?username='+ this.username)
+    .then((res)=>{
+       this.options = res.data.stores.map((item,index)=>({
+        value: index,
+        label: item,
+       }));
+       this.value = this.options[0].label;
+       //这里要进行初始设置一下
+       this.$store.commit('setCurrentStore',this.value);
     })
-  }
+  
+   
+  },
+
+
 
   
 
@@ -154,7 +171,7 @@ body > .el-container {
 .elSelect {
     background-color: #B3C0D1;
     border-color: #B3C0D1;
-
+    margin-right: 10px;
 }
 .el-select__caret {
   color: red;

@@ -30,9 +30,6 @@
                 <el-menu-item index="/admin/superAdmini/accountList"
                   >账户列表</el-menu-item
                 >
-                <el-menu-item index="/admin/superAdmini/accountManage"
-                  >添加账号</el-menu-item
-                >
               </el-submenu>
             </el-menu>
 
@@ -93,8 +90,6 @@ export default {
          isAdmin: (state) => state.isAdmin,
        })
   },
- 
- 
 }
 </script>
 

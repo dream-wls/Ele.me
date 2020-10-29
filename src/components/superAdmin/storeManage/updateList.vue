@@ -32,13 +32,13 @@
 
       <el-form-item label="店铺品类" required>
         <el-checkbox-group v-model="form.type">
-          <el-checkbox label="饭 店" name="type" value="饭 店"></el-checkbox>
-          <el-checkbox label=" 快餐店" name="type" value="快餐店"></el-checkbox>
-          <el-checkbox label=" 茶餐厅" name="type" value="茶餐厅"></el-checkbox>
-          <el-checkbox label="火锅店" name="type" value="火锅店"></el-checkbox>
+          <el-checkbox label="饭 店" name="饭 店" value="饭 店"></el-checkbox>
+          <el-checkbox label=" 快餐店" name="快餐店" value="快餐店"></el-checkbox>
+          <el-checkbox label=" 茶餐厅" name="茶餐厅" value="茶餐厅"></el-checkbox>
+          <el-checkbox label="火锅店" name="火锅店" value="火锅店"></el-checkbox>
           <el-checkbox label="茶 馆" name="type" value="茶 馆"></el-checkbox>
-          <el-checkbox label=" 咖啡店" name="type" value="咖啡店"></el-checkbox>
-          <el-checkbox label="饺子馆" name="type" value="饺子馆"></el-checkbox>
+          <el-checkbox label=" 咖啡店" name="咖啡店" value="咖啡店"></el-checkbox>
+          <el-checkbox label="饺子馆" name="饺子馆" value="饺子馆"></el-checkbox>
           <el-checkbox label="西餐厅" name="type" value="西餐厅"></el-checkbox>
           <el-checkbox label="米粉店" name="type" value="米粉店"></el-checkbox>
           <el-checkbox label=" 熟食店" name="type" value="熟食店"></el-checkbox>
@@ -91,29 +91,32 @@ export default {
     //修改店铺
     onSubmit() {
       console.log("submit!");
+      
+      
       var param = new FormData();
-      console.log('======',this.form);
-      console.log('======',this.file);
       param.append('filename',this.file);
       param.append('storeName',this.form.name);
-      // param.append('storeSales',0);
       param.append('storeType',this.form.type);
       param.append('storeInfo',this.form.desc);
-      // param.append('storeScore',5);
       param.append('storeAddress',this.form.address);
-      param.append('storePsf',this.form.minFee);
+      param.append('storePsf',this.form.shippingFee);
       param.append('storePhone',this.form.call);
-      param.append('storeSendFree',this.form.shippingFee);
+      param.append('storeSendFree',this.form.minFee);
 
       this.$axios.post('/api/store/update?id='+this.id,param,{
         headers: {'content-Type' : 'multipart/form-data'}
       }).then((res)=> {
         console.log('修改成功');
+         this.$message({
+          message: '恭喜你,修改成功！',
+          type: 'success'
+        });
         console.log(res);
+      }).catch(()=> {
+         this.$message.error('修改失败了哦');
       })
     },
     handleAvatarSuccess(res, file) {
-      console.log(file);
       this.file = file.raw;
       this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -122,16 +125,16 @@ export default {
     this.$axios.get('/api/store/find?id='+this.id)
     .then((res)=> {
       var data = res.data.info;
-      console.log(data);
      this.form.name= data.storeName,
      this.form.address= data.storeAddress,
-     this.form.type= data.storeType,
      this.form.minFee= data.storeSendFree,
      this.form.shippingFee= data.storePsf,
      this.form.call= data.storePhone,
      this.form.desc= data.storeInfo;
      this.imageUrl = data.storeImg;
      this.file = data.storeImg;
+     console.log('data.type',data.storeType);
+     this.form.type = data.storeType[0].split(',');
     })
   }
 };

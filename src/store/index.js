@@ -6,6 +6,7 @@ export default new Vuex.Store({
   state: {
     userName: '',//用户的用户名
     isAdmin: '',//是否是管理员
+    currentStore: '',//当前选中的店铺名
   },
   mutations: {
     setUserName(state,payload){
@@ -13,6 +14,9 @@ export default new Vuex.Store({
     },
     setIsAdmin(state,payload){
       state.isAdmin = payload;
+    },
+    setCurrentStore(state,payload){
+      state.currentStore = payload;
     }
   },
   actions: {
