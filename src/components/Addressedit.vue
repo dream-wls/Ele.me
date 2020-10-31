@@ -5,15 +5,16 @@
     ref="areaInfo"
     :area-list="areaList"
     show-postal
-    show-delete
     show-set-default
     show-search-result
     :search-result="searchResult"
     :area-columns-placeholder="['请选择', '请选择', '请选择']"
     @save="onSave"
-    @delete="onDelete"
     @change-detail="onChangeDetail"
+    @change-default="onChangeDefault"
   />
+
+
   </div>
 </template>
 
@@ -21,6 +22,8 @@
 
 import { Toast } from 'vant';
 import areaData from './areaData';
+import { mapState } from 'vuex' ;
+
 
 export default {
  data() {
@@ -30,19 +33,46 @@ export default {
       address : {} ,
     };
   },
+  computed:{
+    ...mapState({
+      form : (state) => state.form,
+    })
+  },
   methods: {
+    //保存
     onSave() {
-      Toast('save');
+      Toast('已保存');
       this.address = this.$refs.areaInfo.data
       console.log(this.address);
       this.$router.push('/mine/address');
-      this.$store.commit('SET_ADDRESS',this.address);
+
+      this.$axios.post('/api/address/add',{
+        username : this.form.username,
+        name : this.address.name,
+        tel : this.address.tel,
+        province : this.address.province,
+        city : this.address.city,
+        county : this.address.county,
+        country : this.address.country,
+        addressDetail : this.address.addressDetail,
+        postalCode : this.address.postalCode,
+        areaCode : this.address.areaCode,
+        isDefault : this.address.isDefault,
+      }).then((res) => {
+        console.log(res.data);
+        if(res.data.code == 0){
+          console.log('数据请求成功');
+
+        }else{
+          console.log('数据请求失败');
+        }
+      }).catch(() => {
+          console.log('数据请求失败');
+      })
+
 
     },
-    onDelete() {
-      this.$refs.areaInfo = '';
-      Toast('delete');
-    },
+    //更改地址
     onChangeDetail(val) {
       if (val) {
         this.searchResult = [
@@ -55,9 +85,14 @@ export default {
         this.searchResult = [];
       }
     },
-    onRetrun(){
-        this.$router.back();
+    //修改默认
+    onChangeDefault(value){
+      console.log(value);
     },
+    onRetrun(){
+        this.$router.push('/mine/address');
+    },
+
   },
 }
 </script>
@@ -67,8 +102,10 @@ export default {
   position: absolute;
   top:0;
   bottom: 0;
-  z-index:1000;
+  z-index:2000;
   width: 100%;
-  background-color: pink;
+  height: 100%;
+  background-color: #eee;
+
 }
 </style>

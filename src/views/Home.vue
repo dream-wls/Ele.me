@@ -1,18 +1,26 @@
 <template>
 <div id="home">
-    <header>
+    <header class="header">
       <div class="head">
         <van-icon class="icon" name="location" />
         <span>袋鼠社区公寓</span>
-        <van-icon @click="goAddress" style=" font-size:14px" name="arrow-down" />
-      </div>
-      
-      <div class="search">
-        <!--  v-model="value" -->
-        <van-search class="sear" shape="round" background="#0085ff"  placeholder="搜索饱了吗商家、商品名称"/>
+        <van-icon style=" font-size:14px" name="arrow-down" />
       </div>
     </header>
 
+    <div class="wrapper">
+      <van-sticky  >
+      <div class="search" >
+        <van-search  v-model="value" @click="goSearch" shape="round" background="#0085ff"  placeholder="搜索饱了吗商家、商品名称"/>
+      </div>
+      <van-notice-bar
+      left-icon="volume-o"
+      text="欢迎进入3W项目 饱了吗 ，仅供学习，页面不完美，尽请原谅！"
+    />
+    </van-sticky>
+    </div>
+     
+    
     <div class="fresh">
       <van-pull-refresh  v-model="isLoading" @refresh="onRefresh">
 
@@ -59,16 +67,15 @@
         </van-divider>
       </div>
       
-      <!-- -->
       <div v-if="isOk"  ref="scroll">
           <div class="list" >
-            <div class="item" v-for="(item,index) in dataList" :key="index">
+            <div class="item" v-for="(item,index) in dataList" :key="index" @click="goDetail(item._id)" >
               <div class="leftImg"><img :src="item.storeImg" alt=""></div>
               <div class="rightCon">
                 <h1>{{item.storeName}}</h1>
                 <div class="commend">
                   <!-- " -->
-                  <van-rate :size="6" allow-half v-model="item.storeScore" color="#ffd21e" void-icon="star"    void-color="#eee" readonly />
+                  <van-rate :size="5" allow-half v-model="item.storeScore" color="#ffd21e" void-icon="star"    void-color="#eee" readonly />
                   <span> {{item.storeScore}} 月售{{item.storeSales}}单</span>
                 </div>
               <div class="price">
@@ -82,18 +89,11 @@
           </div>
       </div>
 
-      <!-- 上拉加载更多的结构 -->
-      <div class="pull-up">
-        <div>
-          <van-icon class="icon" name="upgrade" />
-          <span>{{ pullUpText }}</span>
-        </div>
-      
-      </div>
-
       </van-pull-refresh>
     </div>
+   
 
+    <router-view></router-view>
     
 </div>
 </template>
@@ -106,51 +106,59 @@ export default {
   data(){
     return{
       page : 1,
+      value:'',
       dataList : [],
       isOk : false,
       count: 0,
       isLoading: false,
+
       pullUpText:'上拉加载更多',
+      upgrade : true,
+      upLoading : false,
+
     }
   },
-  created(){
-    
+  wacth:{
+    $route(){
+        this.requestAjax();
+    }
   },
   mounted(){
-    this.$axios('/api/store/list',{
-      params : { page : this.page } 
-    }).then((res) => {
-      if(res.data.code == 0){
-        console.log('成功');
-        this.isOk = true;
-        this.dataList = res.data.infos;
-        console.log( this.dataList);
-
-      }else{
-        console.log('失败');
-      }
-    }).catch(() => {
-      console.log('失败');
-    })
-    
+    this.requestAjax();
   },
   methods:{
-    goAddress(){
-      this.$router.push('/mine/address');
-    },
-    onRefresh() {
-      this.page++;
-      console.log(this.page);
+    //请求数据
+    requestAjax(){
       this.$axios('/api/store/list',{
         params : { page : this.page } 
       }).then((res) => {
         if(res.data.code == 0){
-          console.log('成功');
+          // console.log('成功');
+          this.isOk = true;
+          this.dataList = res.data.infos;
+          // console.log( this.dataList);
+
+        }else{
+          console.log('失败');
+        }
+      }).catch(() => {
+        console.log('失败');
+      })
+    },
+
+    onRefresh() {
+      this.page++;
+      // console.log(this.page);
+      this.$axios('/api/store/list',{
+        params : { page : this.page } 
+      }).then((res) => {
+        if(res.data.code == 0){
+          // console.log('成功');
           this.isOk = true;
           res.data.infos.forEach(item => {
             this.dataList.push( item);
           })
-          console.log( this.dataList);
+          // console.log( this.dataList);
         }else{
           console.log('失败');
         }
@@ -165,7 +173,16 @@ export default {
       }, 500);
     },
 
-    
+    goSearch(){
+      // console.log(this.value);
+      this.$router.push('/search');
+    },
+    goDetail(id){
+      // console.log(id);
+      this.$router.push('/detail/' + id);
+      this.$store.commit('SET_STOREID' , id);
+      console.log(id);
+    }
 
   }
 }
@@ -173,18 +190,19 @@ export default {
 
 <style lang="scss" scoped>
 #home{
-  header{
+  
+  .header{
     display: flex;
-    padding-top: 18px;
-    padding-left:16px;
-    height: 95px;
-    box-sizing: border-box;
+    width:100%;
     background-color: #0085ff;
     font-size: 16px;
+     color: #fff;
     .head{
-      height: 25px;
-      float: left;
-      // background: pink;
+      width: 100%;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      padding: 15px 0 0  20px;
       .icon{
         padding-top: 4px;
       }
@@ -197,21 +215,18 @@ export default {
         
       }
     }
-     .search{
-        float: left;
-        margin-top: 22px;
-        position: absolute;
-        .sear{
-          width: 332px;
-          padding: 8px 10px;
-          
-        }
-      }
    
   }
+  .wrapper{
+    width:100%;
+    z-index: 999;
+     &::-webkit-scrollbar{
+    display: none}
+  }
+  
   .fresh{
     width: 100%;
-    margin-top:100px;
+    height: 100%;
     // background-color: pink;
     .content{
         width: 100%;
@@ -256,7 +271,9 @@ export default {
       width: 100%;
       height: 100%;
       //  overflow: aotu;
-      margin-bottom: 20px;
+      margin-bottom: 80px;
+      &::-webkit-scrollbar{
+         display: none}
       .item{
           width: 100%;
           height: 104px;
@@ -316,7 +333,7 @@ export default {
     }
     
   }
- 
+
 
 }
 </style>

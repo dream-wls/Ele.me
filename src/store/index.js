@@ -10,7 +10,10 @@ export default new Vuex.Store({
       username : '',
       phone : ''
     },
-    address : {} ,
+    menu : {} ,
+    priceList : [],
+    id : '',
+
   },
   mutations: {
     SET_USERNAME(state,payload){
@@ -19,11 +22,17 @@ export default new Vuex.Store({
     SET_FORM(state,payload){
       state.form = payload;
     },
-    SET_ADDRESS(state,payload){
-      state.address = payload;
-      // console.log( state.address);
-
+    SET_MENU(state,payload){
+      state.menu = payload;
+    },
+    SET_TOTALPRICE(state,payload){
+      state.priceList = payload ;
+    },
+    SET_STOREID(state,payload){
+      state.id = payload;
     }
+
+
   },
   actions: {
   },

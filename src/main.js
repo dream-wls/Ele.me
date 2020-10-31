@@ -5,7 +5,8 @@ import store from './store'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import axios from 'axios';
-
+// import Plugin from './plugin'
+// Vue.use(Plugin);
 
 import { AddressEdit } from 'vant';
 import { Dialog } from 'vant';

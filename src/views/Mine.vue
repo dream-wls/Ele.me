@@ -55,9 +55,9 @@ export default {
 <style lang="scss" >
 #mine{
     background-color: #eee;;
-    height: 600px;
+    height: 618px;
     bottom: 50px;
-    z-index:10000;
+    z-index:2007;
     header{
         display: flex;
         padding: 30px;
@@ -93,7 +93,6 @@ export default {
         }
     }
     .con{
-        padding-top: 140px;
         li{
             border-radius: 4px;
             margin-top: 12px;

@@ -76,7 +76,7 @@ export default {
 
 <style lang='scss'>
 #rule{
-    z-index: 1000;
+    z-index: 2007;
     background-color:#eee;
     position: absolute;
     top: 0px;

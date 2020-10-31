@@ -7,7 +7,7 @@
         </van-cell> 
         <van-cell title="用户名" is-link :value="form.username" />
         <van-cell title="手机号" is-link :value="form.phone" />
-       <van-cell title="登录密码" is-link :value="form.password" />
+       <van-cell title="登录密码" is-link value="*****" />
     </div>
   
       <van-button style="margin-top:20px; margin-left:30px;width:80%"  round block type="danger" @click="goLogin">退出登录</van-button>
@@ -15,17 +15,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex' ;
+
 export default {
 
   data(){
     return{
       img:require('../assets/head.jpg') ,
-      form:{
-        username : 'Swagmy',
-        phone: '187****8757',
-        password : '******'
-      }
     }
+  },
+  computed:{
+    ...mapState({
+      form : (state) => state.form ,
+    })
   },
   methods:{
     onRetrun(){
@@ -41,7 +43,7 @@ export default {
 
 <style lang='scss'>
 #person{
-  z-index: 1000;
+  z-index: 2007;
   background-color:#eee;
   position: absolute;
   top: 0px;

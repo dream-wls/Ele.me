@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import axios from 'axios';
 import store from '@/store'
 
@@ -10,53 +9,80 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: () => import( /* webpackChunkName : "home" */ '@/views/Home.vue'),
+   
   },
+  // 搜索页面search 和 商家详情detail
+  {
+    path : '/search' ,
+    name : 'Search',
+    component : () => import( /* webpackChunkName : "search" */ '@/views/Search.vue'),
+  },
+  {
+    path : '/detail/:id' ,
+    name : 'Detail',
+    component : () => import(/* webpackChunkName : "detail" */  '@/views/Detail.vue'),
+    props : true ,
+  },
+  {
+    path : '/item/:itemId',
+    name : 'Item',
+    component : () => import(/* webpackChunkName : "detail" */ '@/components/Item.vue'),
+    props : true ,
+  },
+
+  //订单 order
   {
     path: '/order',
     name: 'Order',
-    component: () => import('@/views/Order.vue')
+    component: () => import(/* webpackChunkName : "order" */ '@/views/Order.vue')
   },
+
+  //我的 mine
   {
     path: '/mine',
     name: 'Mine',
-    component: () => import('@/views/Mine.vue'),
+    component: () => import( /* webpackChunkName : "mine" */ '@/views/Mine.vue'),
     children : [
       {
         path: 'person',
-        component: () => import('@/components/Person.vue'),
+        component: () => import( /* webpackChunkName : "mine" */ '@/components/Person.vue'),
       },
       {
         path: 'address',
-        component: () => import('@/components/Address.vue'),
+        component: () => import( /* webpackChunkName : "mine" */ '@/components/Address.vue'),
         children : [
           {
             path : 'addressedit' ,
-            component : () => import('@/components/Addressedit.vue')
+            component : () => import( /* webpackChunkName : "mine" */ '@/components/Addressedit.vue')
           },
           {
-            path : 'addressupdate/:index' ,
-            component : () => import('@/components/Addressupdate.vue'),
+            path : 'addressupdate/:Idindex' ,
+            component : () => import( /* webpackChunkName : "mine" */ '@/components/Addressupdate.vue'),
             props:true,
           }
         ]
       },
       {
         path: 'rule',
-        component: () => import('@/components/Rule.vue')
+        component: () => import( /* webpackChunkName : "mine" */ '@/components/Rule.vue')
       },
     ]
   },
+
+  //登录和注册 login register
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login.vue')
+    component: () => import( /* webpackChunkName : "login" */ '@/views/Login.vue')
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('@/views/Register.vue')
+    component: () => import(  /* webpackChunkName : "register" */ '@/views/Register.vue')
   },
+
+
   {
     path: '/*',
     redirect : '/home'
